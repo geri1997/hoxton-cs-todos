@@ -35,7 +35,7 @@ export function App () {
         {todos.map(todo => (
           <li key={todo.id} data-testid={`todo-${todo.id}`}>
             {todo.title}
-            <button
+            <button data-testid={`remove-${todo.id}`}
               onClick={() => {
                 const updatedTodos = removeTodo(todos, todo.id)
                 setTodos(updatedTodos)

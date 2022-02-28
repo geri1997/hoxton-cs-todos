@@ -1,5 +1,6 @@
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { addTodo, removeTodo } from './App';
+import { addTodo, App, removeTodo } from './App';
 
 describe('addTodo', () => {
    it('returns an array with one todo', () => {
@@ -48,17 +49,70 @@ describe('removeTodo', () => {
       ]);
    });
    it('returns an array without a specified todo', () => {
-    const result = removeTodo(
-       [
-          { id: 1, title: 'new todo' },
-          { id: 2, title: 'new todo2' },
-          { id: 3, title: 'new todo3' },
-       ],
-       3
-    );
-    expect(result).toMatchObject([
-       { id: 1, title: 'new todo' },
-       { id: 2, title: 'new todo2' },
-    ]);
- });
+      const result = removeTodo(
+         [
+            { id: 1, title: 'new todo' },
+            { id: 2, title: 'new todo2' },
+            { id: 3, title: 'new todo3' },
+         ],
+         3
+      );
+      expect(result).toMatchObject([
+         { id: 1, title: 'new todo' },
+         { id: 2, title: 'new todo2' },
+      ]);
+   });
+});
+
+describe('App display on load', () => {
+   it('Displays add todo button and h1 on load', () => {
+      render(<App />);
+      const heading = screen.getByRole('heading');
+      const addTodoBtn = screen.getByRole('button');
+      expect(heading).toHaveTextContent('Todo app');
+      expect(addTodoBtn).toHaveTextContent('ADD TODO');
+   });
+});
+
+describe('Todo buttons', () => {
+   it(`Add new todo on clicking the 'add todo button'`, () => {
+      render(<App />);
+      const addTodoButton = screen.getByText('ADD TODO');
+      fireEvent.click(addTodoButton);
+
+      const display = screen.getByTestId('todo-1');
+
+      expect(display.textContent).toContain('New todo, yay!');
+   });
+
+   it(`Removes the only todo left on clicking the 'X button'`, () => {
+      render(<App />);
+      const addTodoButton = screen.getByText('ADD TODO');
+      fireEvent.click(addTodoButton);
+
+      const removeTodoButton = screen.getByText('X');
+      fireEvent.click(removeTodoButton);
+      const display = screen.getByRole('list');
+      expect(display.innerHTML).toBe('');
+   });
+
+   it(`Removes a todo on clicking the 'X button'`, () => {
+      render(<App />);
+      const addTodoButton = screen.getByText('ADD TODO');
+      fireEvent.click(addTodoButton);
+      fireEvent.click(addTodoButton);
+      fireEvent.click(addTodoButton);
+      fireEvent.click(addTodoButton);
+      fireEvent.click(addTodoButton);
+      fireEvent.click(addTodoButton);
+      fireEvent.click(addTodoButton);
+      fireEvent.click(addTodoButton);
+      fireEvent.click(addTodoButton);
+      fireEvent.click(addTodoButton);
+
+      const removeTodoButton = screen.getByTestId('remove-3');
+      fireEvent.click(removeTodoButton);
+      const display = screen.getAllByRole('listitem');
+      expect(display.length).toBe(9)
+   });
 });
