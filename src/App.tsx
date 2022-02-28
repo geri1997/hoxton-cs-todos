@@ -6,7 +6,7 @@ export type Todo = {
   title: string
 }
 
-export function addTodo (todos: Todo[], title: string) {
+export function addTodo (todos: Todo[]=[], title: string) {
   const newTodo = { id: todos.length + 1, title: title }
   return [...todos, newTodo]
 }
