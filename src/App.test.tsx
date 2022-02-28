@@ -113,6 +113,6 @@ describe('Todo buttons', () => {
       const removeTodoButton = screen.getByTestId('remove-3');
       fireEvent.click(removeTodoButton);
       const display = screen.getAllByRole('listitem');
-      expect(display.length).toBe(9)
+      expect(display).toHaveLength(9)
    });
 });
