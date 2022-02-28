@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import AddTodoBtn from './AddTodoBtn'
 import './App.css'
+import TodoLi from './TodoLi'
 
 export type Todo = {
   id: number
@@ -22,28 +24,11 @@ export function App () {
     <div className='App'>
       <h1>Todo app</h1>
 
-      <button
-        onClick={() => {
-          const updatedTodos = addTodo(todos, 'New todo, yay!')
-          setTodos(updatedTodos)
-        }}
-      >
-        ADD TODO
-      </button>
+      <AddTodoBtn setTodos={setTodos} addTodo={addTodo} todos={todos}/>
 
       <ul>
         {todos.map(todo => (
-          <li key={todo.id} data-testid={`todo-${todo.id}`}>
-            {todo.title}
-            <button data-testid={`remove-${todo.id}`}
-              onClick={() => {
-                const updatedTodos = removeTodo(todos, todo.id)
-                setTodos(updatedTodos)
-              }}
-            >
-              X
-            </button>
-          </li>
+          <TodoLi key={todo.id} todo={todo} removeTodo={removeTodo} setTodos={setTodos} todos={todos}/>
         ))}
       </ul>
     </div>
